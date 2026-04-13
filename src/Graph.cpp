@@ -122,11 +122,10 @@ std::vector<std::string> Graph::neighbors(const std::string& vertex) const {
 //     network "degrees of separation"
 //
 std::vector<std::string> Graph::bfs(const std::string& start) const {
-    std::vector<std::string> result;
-    // TODO: implement BFS using a queue and visited set
+    // TO-DO: implement BFS using a queue and visited set
 
-    std::vector<std::string> r;
-    if (!has_vertex(start)) return r;
+    std::vector<std::string> result;
+    if (!has_vertex(start)) return result;
 
     std::queue<std::string> q;
     std::unordered_set<std::string> v;
@@ -137,11 +136,14 @@ std::vector<std::string> Graph::bfs(const std::string& start) const {
     while (!q.empty())
     {
         auto current = q.front(); q.pop();
-        q.pop();
         result.push_back(current);
-        for (const  std::string& neighbor : neighbors(current))
+        for (const auto& neighbor : adj_list_.at(current))
         {
-
+            if (v.find(neighbor) == v.end())
+            {
+                v.insert(neighbor);
+                q.push(neighbor);
+            }
         } break;
     }
 
@@ -168,7 +170,36 @@ std::vector<std::string> Graph::bfs(const std::string& start) const {
 //
 std::vector<std::string> Graph::dfs(const std::string& start) const {
     std::vector<std::string> result;
-    // TODO: implement DFS using a stack and visited set
+    if (!has_vertex(start)) return result;
+
+    std::stack<std::string> the_stack;
+    std::unordered_set<std::string> visited;
+
+    the_stack.push(start);
+
+
+
+    while (!the_stack.empty())
+    {
+        std::string current = the_stack.top(); the_stack.pop();
+
+        if (visited.find(current) != visited.end()) continue;
+        visited.insert(current);
+
+        result.push_back(current);
+
+        const auto& nbrs = neighbors(current);
+        for (auto it = nbrs.rbegin(); it != nbrs.rend(); ++it)
+        {
+            if (visited.find(*it) == visited.end())
+            {
+                the_stack.push(*it);
+            }
+        }
+
+    }
+
+
     return result;
 }
 

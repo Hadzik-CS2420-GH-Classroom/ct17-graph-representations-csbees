@@ -58,7 +58,7 @@ int main() {
     for (const auto& n : g.neighbors("Alice")) {
         std::cout << n << " ";
     }
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl; // NOOO DON'T USE std::endl USE '\n'!!!
 
     // =============================================================================
     // Section 3: BFS
