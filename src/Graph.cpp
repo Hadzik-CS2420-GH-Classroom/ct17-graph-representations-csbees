@@ -122,29 +122,25 @@ std::vector<std::string> Graph::neighbors(const std::string& vertex) const {
 //     network "degrees of separation"
 //
 std::vector<std::string> Graph::bfs(const std::string& start) const {
-    // TO-DO: implement BFS using a queue and visited set
-
     std::vector<std::string> result;
     if (!has_vertex(start)) return result;
 
     std::queue<std::string> q;
-    std::unordered_set<std::string> v;
+    std::unordered_set<std::string> visited;
 
     q.push(start);
-    v.insert(start);
+    visited.insert(start);
 
-    while (!q.empty())
-    {
-        auto current = q.front(); q.pop();
-        result.push_back(current);
-        for (const auto& neighbor : adj_list_.at(current))
-        {
-            if (v.find(neighbor) == v.end())
-            {
-                v.insert(neighbor);
-                q.push(neighbor);
+    while (!q.empty()) {
+        std::string vertex = q.front();
+        q.pop();
+        result.push_back(vertex);
+        for (const auto& nbr : neighbors(vertex)) {
+            if (visited.find(nbr) == visited.end()) {
+                q.push(nbr);
+                visited.insert(nbr);
             }
-        } break;
+        }
     }
 
     return result;
